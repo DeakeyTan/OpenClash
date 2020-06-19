@@ -27,7 +27,7 @@
           if [ ! -z "$(grep "^ \{0,\}fake-ip-range:" "$7")" ]; then
              sed -i "/^ \{0,\}fake-ip-range:/c\  fake-ip-range: 198.18.0.1/16" "$7"
           else
-             sed -i "/enhanced-mode:/a\  fake-ip-range: 198.18.0.1/16" "$7"
+             sed -i "/^ \{0,\}enhanced-mode:/a\  fake-ip-range: 198.18.0.1/16" "$7"
           fi
        fi
     else
@@ -160,7 +160,7 @@
     fi
 
     if [ "$8" -eq 1 ]; then
-       if [ -z "$(grep "  ipv6: true" "$7")" ]; then
+       if [ -z "$(grep "^  ipv6: true" "$7")" ]; then
           if [ ! -z "$(grep "^ \{0,\}ipv6:" "$7")" ]; then
              sed -i "/^ \{0,\}ipv6:/c\  ipv6: true" "$7"
           else
@@ -168,7 +168,7 @@
           fi
        fi
     else
-       if [ -z "$(grep "  ipv6: false" "$7")" ]; then
+       if [ -z "$(grep "^  ipv6: false" "$7")" ]; then
           if [ ! -z "$(grep "^ \{0,\}ipv6:" "$7")" ]; then
              sed -i "/^ \{0,\}ipv6:/c\  ipv6: false" "$7"
           else
@@ -219,7 +219,7 @@
     fi
     
 #fake-ip-filter
-    sed -i '/##Custom fake-ip-filter##/,/##Custom fake-ip-filter END##/d' "$7" 2>/dev/null    
+    sed -i '/##Custom fake-ip-filter##/,/##Custom fake-ip-filter END##/d' "$7" 2>/dev/null
 	  if [ "$2" = "fake-ip" ]; then
       if [ ! -f "/etc/openclash/fake_filter.list" ] || [ ! -z "$(grep "config servers" /etc/config/openclash)" ]; then
          /usr/share/openclash/openclash_fake_filter.sh
@@ -231,10 +231,10 @@
       if [ -s "/etc/openclash/fake_filter.list" ]; then
       	if [ ! -z "$(grep "^ \{0,\}fake-ip-filter:" "$7")" ]; then
       	   sed -i "/^ \{0,\}fake-ip-filter:/c\  fake-ip-filter:" "$7"
-      	   sed -i '/fake-ip-filter:/r/etc/openclash/fake_filter.list' "$7" 2>/dev/null
+      	   sed -i '/^ \{0,\}fake-ip-filter:/r/etc/openclash/fake_filter.list' "$7" 2>/dev/null
       	else
       	   echo "  fake-ip-filter:" >> "$7"
-      	   sed -i '/fake-ip-filter:/r/etc/openclash/fake_filter.list' "$7" 2>/dev/null
+      	   sed -i '/^ \{0,\}fake-ip-filter:/r/etc/openclash/fake_filter.list' "$7" 2>/dev/null
         fi
       fi
    fi
